@@ -1,0 +1,33 @@
+class Solution {
+    private int result = 0;
+    private List<Integer> dive(TreeNode node, int dis) {
+        if (node == null) return new ArrayList<>();
+                if (node.left == null && node.right == null) {
+            List<Integer> temp = new ArrayList<>();
+            temp.add(1);
+            return temp;
+        }
+        List<Integer> lleft = dive(node.left, dis);
+        List<Integer> rleft = dive(node.right, dis); 
+        for (int l : lleft) {
+            for (int r : rleft) {
+                if (l + r <= dis) { 
+                    result++;
+                }
+            }
+        }
+        List<Integer> level = new ArrayList<>(); 
+        for (int l : lleft) {
+            if (l + 1 <= dis) level.add(l + 1);
+        }
+        for (int r : rleft) {
+            if (r + 1 <= dis) level.add(r + 1);
+        }
+        return level;
+    }
+    public int countPairs(TreeNode root, int distance) {
+        result = 0; 
+        dive(root, distance); 
+        return result;
+    }
+}
