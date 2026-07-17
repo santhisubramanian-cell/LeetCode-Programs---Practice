@@ -1,0 +1,50 @@
+import java.util.ArrayList;
+import java.util.List;
+
+class Solution {
+
+    boolean[][] visited;
+    int[][] dir = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+    int[][] grid;
+    int og;
+    List<int[]> toBeColored = new ArrayList<>();
+
+    public void dfs(int row, int col) {
+        visited[row][col] = true;
+        int sCount = 0;
+
+        for (int[] d : dir) {
+            int cr = row + d[0];
+            int cc = col + d[1];
+
+            if (cr >= 0 && cc >= 0 && cr < grid.length && cc < grid[0].length) {
+
+                if (grid[cr][cc] == og) {
+                    sCount++;
+
+                    if (!visited[cr][cc]) {
+                        dfs(cr, cc);
+                    }
+                }
+            }
+        }
+        if (sCount < 4) {
+            toBeColored.add(new int[]{row, col});
+        }
+    }
+
+    public int[][] colorBorder(int[][] grid, int row, int col, int color) {
+        this.grid = grid;
+        this.og = grid[row][col];
+        this.visited = new boolean[grid.length][grid[0].length];
+        this.toBeColored = new ArrayList<>();
+
+        dfs(row, col);
+
+        for (int[] cell : toBeColored) {
+            grid[cell[0]][cell[1]] = color;
+        }
+
+        return grid;
+    }
+}
